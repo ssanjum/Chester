@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="6dp"
+        android:elevation="3dp"
+        card_view:cardCornerRadius="3dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".8"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_item_song_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NUMB" />
+
+                <TextView
+                    android:id="@+id/tv_item_artist_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Linkin Park" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_item"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".2"
+                android:text="play" />
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>
