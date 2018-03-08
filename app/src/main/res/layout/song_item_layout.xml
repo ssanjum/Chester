@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/card_view"
@@ -13,36 +14,24 @@
         android:elevation="3dp"
         card_view:cardCornerRadius="3dp">
 
+
         <LinearLayout
+            android:id="@+id/ll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".8"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_item_song_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="NUMB" />
-
-                <TextView
-                    android:id="@+id/tv_item_artist_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Linkin Park" />
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/btn_item"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/tv_item_song_name"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight=".2"
-                android:text="play" />
+                android:text="NUMB" />
+
+            <TextView
+                android:id="@+id/tv_item_artist_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Linkin Park" />
         </LinearLayout>
 
 

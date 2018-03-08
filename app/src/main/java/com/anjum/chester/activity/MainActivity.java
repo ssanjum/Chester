@@ -1,5 +1,6 @@
 package com.anjum.chester.activity;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -38,35 +39,17 @@ public class MainActivity extends AppCompatActivity {
         mSongRecycler.addItemDecoration(new DividerItemDecoration(this, new LinearLayoutManager(this).getOrientation()));
         loadSong();
         mSongRecycler.setAdapter(songAdapter);
-        songAdapter.setOnItemClickListner(new SongAdapter.onItemClickListner() {
-            @Override
-            public void onRowClick(int pos, SongInfoModel infoModel, final Button button) {
-                mediaPlayer = new MediaPlayer();
-                if (button.getText().equals("play")) {
-                    try {
-                        mediaPlayer.setDataSource(infoModel.getSongUrl());
-                        mediaPlayer.prepareAsync();
-                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                            @Override
-                            public void onPrepared(MediaPlayer mp) {
-                                mp.start();
-                                button.setText("stop");
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+       songAdapter.setOnItemClickListner(new SongAdapter.onItemClickListner() {
+           @Override
+           public void onRowClick(int pos, SongInfoModel infoModel, View button) {
+               Intent intent=new Intent(MainActivity.this,PlayerActivity.class);
+               Bundle bundle=new Bundle();
+               bundle.putSerializable("SER",infoModel);
+               intent.putExtras(bundle);
+               startActivity(intent);
 
-                } else {
-                    button.setText("play");
-                    mediaPlayer.stop();
-                   // mediaPlayer.reset();
-                    //mediaPlayer.release();
-                    mediaPlayer = null;
-                }
-            }
-
-        });
+           }
+       });
 
     }
 

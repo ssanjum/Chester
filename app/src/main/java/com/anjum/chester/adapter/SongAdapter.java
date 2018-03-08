@@ -26,7 +26,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongHolder> {
 
     public interface onItemClickListner {
 
-        void onRowClick(int pos, SongInfoModel infoModel, Button button);
+        void onRowClick(int pos, SongInfoModel infoModel, View button);
 
     }
 
@@ -51,11 +51,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongHolder> {
         final SongInfoModel infoModel = songInfoModel.get(position);
         holder.tvSongName.setText(infoModel.getSongName());
         holder.tvartistName.setText(infoModel.getArtistName());
-        holder.button.setOnClickListener(new View.OnClickListener() {
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (onItemClickListner != null) {
-                    onItemClickListner.onRowClick(position, infoModel, holder.button);
+                    onItemClickListner.onRowClick(position, infoModel, holder.linearLayout);
                 }
 
             }
@@ -71,13 +71,13 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongHolder> {
     public class SongHolder extends RecyclerView.ViewHolder {
         private TextView tvSongName;
         private TextView tvartistName;
-        private Button button;
+        private LinearLayout linearLayout;
 
         public SongHolder(View itemView) {
             super(itemView);
             tvSongName = itemView.findViewById(R.id.tv_item_song_name);
             tvartistName = itemView.findViewById(R.id.tv_item_artist_name);
-            button = itemView.findViewById(R.id.btn_item);
+            linearLayout=itemView.findViewById(R.id.ll);
         }
     }
 }
