@@ -15,8 +15,8 @@ import java.io.IOException;
 public class PlayerActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageView ivBack, ivPlay, ivForward;
     private SeekBar seekBar;
-    private MediaPlayer mediaPlayer;
     private SongInfoModel infoModel;
+    private MyMediaPlayer myMediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +30,20 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         ivForward.setOnClickListener(this);
         ivPlay.setOnClickListener(this);
         ivBack.setOnClickListener(this);
-        mediaPlayer=new MediaPlayer();
+        myMediaPlayer=new MyMediaPlayer(myPlayerListener);
     }
+
+    MyMediaPlayer.MyPlayerListener myPlayerListener=new MyMediaPlayer.MyPlayerListener() {
+        @Override
+        public void onStart() {
+            ivPlay.setImageResource(R.drawable.ic_action_pause);
+        }
+
+        @Override
+        public void onStop() {
+            ivPlay.setImageResource(R.drawable.ic_action_play);
+        }
+    };
 
     @Override
     public void onClick(View v) {
@@ -47,29 +59,18 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void playMusic() {
-
-        if (mediaPlayer.isPlaying()) {
-            ivPlay.setImageResource(R.drawable.ic_action_play);
-            mediaPlayer.stop();
-            mediaPlayer.release();
-
-        } else {
-            try {
-                mediaPlayer.setDataSource(infoModel.getSongUrl());
-                mediaPlayer.prepareAsync();
-                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        ivPlay.setImageResource(R.drawable.ic_action_pause);
-                        mediaPlayer=mp;
-                        mediaPlayer.start();
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+        if(myMediaPlayer.isPlaying()){
+            myMediaPlayer.stop();
+        }else{
+            myMediaPlayer.start(infoModel);
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(myMediaPlayer.isPlaying()){
+            myMediaPlayer.stop();
+        }
+    }
 }
