@@ -1,6 +1,7 @@
 package com.anjum.chester.activity;
 
 import android.media.MediaPlayer;
+import android.widget.SeekBar;
 
 import com.anjum.chester.model.SongInfoModel;
 
@@ -19,7 +20,7 @@ public class MyMediaPlayer {
         this.playerListener = playerListener;
     }
 
-    public void start(SongInfoModel songInfoModel){
+    public void start(SongInfoModel songInfoModel, SeekBar seekBar){
         mediaPlayer=new MediaPlayer();
         try {
             mediaPlayer.setDataSource(songInfoModel.getSongUrl());

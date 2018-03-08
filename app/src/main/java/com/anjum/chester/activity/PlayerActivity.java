@@ -25,6 +25,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         ivBack = findViewById(R.id.ivRewind);
         ivPlay = findViewById(R.id.ivPlay);
         ivForward = findViewById(R.id.ivForward);
+        seekBar=findViewById(R.id.seekbar);
         Bundle bundle = getIntent().getExtras();
         infoModel = (SongInfoModel) bundle.getSerializable("SER");
         ivForward.setOnClickListener(this);
