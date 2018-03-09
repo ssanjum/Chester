@@ -20,7 +20,7 @@ public class MyMediaPlayer {
         this.playerListener = playerListener;
     }
 
-    public void start(SongInfoModel songInfoModel, SeekBar seekBar){
+    public void start(SongInfoModel songInfoModel){
         mediaPlayer=new MediaPlayer();
         try {
             mediaPlayer.setDataSource(songInfoModel.getSongUrl());
