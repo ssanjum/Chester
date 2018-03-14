@@ -1,8 +1,11 @@
 package com.anjum.chester.activity;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.media.MediaPlayer;
-import android.os.Handler;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,19 +13,18 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+
 import com.anjum.chester.R;
 import com.anjum.chester.model.SongInfoModel;
-import com.anjum.chester.services.MyMusicService;
-
-import java.io.IOException;
 
 public class PlayerActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageView ivBack, ivPlay, ivForward;
     private SeekBar seekBar;
     private SongInfoModel infoModel;
-    private MediaPlayer mediaPlayer;
-    private boolean isPlaying;
     private TextView tvSongName, tvArtistName;
+    private boolean isServiceBound;
+    private boolean isPlaying;
+    private MusicService musicService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,30 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MusicService.MyBinder myBinder = (MusicService.MyBinder) service;
+            musicService = myBinder.getService();
+            musicService.setSong(infoModel);
+            isServiceBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isServiceBound = false;
+        }
+    };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, MusicService.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("SER", infoModel);
+        intent.putExtras(bundle);
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
 
     @Override
     public void onClick(View v) {
@@ -51,12 +77,12 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.ivRewind:
                 break;
             case R.id.ivPlay:
-                Intent intent = new Intent(this, MyMusicService.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("SER", infoModel);
-                intent.putExtras(bundle);
-                startService(intent);
-                // playMusic();
+                if (!musicService.isPlaying()) {
+                    ivPlay.setImageResource(R.drawable.ic_action_pause);
+                } else {
+                    ivPlay.setImageResource(R.drawable.ic_action_play);
+                }
+                musicService.startPlayer();
                 break;
             case R.id.ivForward:
                 break;
@@ -95,11 +121,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (isPlaying) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-            isPlaying = false;
-        }
+
     }
 
 
