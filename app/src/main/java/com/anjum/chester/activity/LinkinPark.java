@@ -11,18 +11,16 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.SeekBar;
 
 import com.anjum.chester.R;
 import com.anjum.chester.adapter.SongAdapter;
 import com.anjum.chester.model.SongInfoModel;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class LinkinPark extends AppCompatActivity {
     private RecyclerView mSongRecycler;
     private SeekBar seekBar;
     private SongAdapter songAdapter;
@@ -31,25 +29,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mSongRecycler = findViewById(R.id.rv_song);
+        setContentView(R.layout.activity_linkin_park);
+        mSongRecycler = findViewById(R.id.lprecycler);
         songList = new ArrayList<>();
         mSongRecycler.setLayoutManager(new LinearLayoutManager(this));
         mSongRecycler.addItemDecoration(new DividerItemDecoration(this, new LinearLayoutManager(this).getOrientation()));
         loadSong();
         mSongRecycler.setAdapter(songAdapter);
-       songAdapter.setOnItemClickListner(new SongAdapter.onItemClickListner() {
-           @Override
-           public void onRowClick(int pos, SongInfoModel infoModel, View button) {
-               Intent intent=new Intent(MainActivity.this,PlayerActivity.class);
-               Bundle bundle=new Bundle();
-               bundle.putSerializable("SER",infoModel);
-               intent.putExtras(bundle);
-               startActivity(intent);
+        songAdapter.setOnItemClickListner(new SongAdapter.onItemClickListner() {
+            @Override
+            public void onRowClick(int pos, SongInfoModel infoModel, View button) {
+                Intent intent = new Intent(LinkinPark.this, MyPlayer.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("SER", infoModel);
+                intent.putExtras(bundle);
+                startActivity(intent);
 
-           }
-       });
-
+            }
+        });
     }
 
     private void loadSong() {
@@ -72,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         songAdapter = new SongAdapter(songList, this);
+
 
     }
 }

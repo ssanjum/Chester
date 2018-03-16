@@ -4,7 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 
 import com.anjum.chester.R;
 import com.anjum.chester.model.SongInfoModel;
+import com.anjum.chester.services.MusicPlayerService;
 
 public class PlayerActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageView ivBack, ivPlay, ivForward;
@@ -23,8 +23,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private SongInfoModel infoModel;
     private TextView tvSongName, tvArtistName;
     private boolean isServiceBound;
-    private boolean isPlaying;
-    private MusicService musicService;
+    private MusicPlayerService musicPlayerService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +48,9 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            MusicService.MyBinder myBinder = (MusicService.MyBinder) service;
-            musicService = myBinder.getService();
-            musicService.setSong(infoModel);
+            MusicPlayerService.MyBinder binder = (MusicPlayerService.MyBinder) service;
+            musicPlayerService = binder.getService();
+            musicPlayerService.setSong(infoModel);
             isServiceBound = true;
         }
 
@@ -64,7 +63,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = new Intent(this, MusicService.class);
+        Intent intent = new Intent(this, MusicPlayerService.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("SER", infoModel);
         intent.putExtras(bundle);
@@ -75,14 +74,16 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivRewind:
+                Intent intent = new Intent(this, DemoActivity.class);
+                startActivity(intent);
                 break;
             case R.id.ivPlay:
-                if (!musicService.isPlaying()) {
+                if (!musicPlayerService.isPlaying()) {
                     ivPlay.setImageResource(R.drawable.ic_action_pause);
                 } else {
                     ivPlay.setImageResource(R.drawable.ic_action_play);
                 }
-                musicService.startPlayer();
+                musicPlayerService.startPlayer();
                 break;
             case R.id.ivForward:
                 break;

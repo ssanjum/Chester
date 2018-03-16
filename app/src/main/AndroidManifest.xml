@@ -3,7 +3,7 @@
     package="com.anjum.chester">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -11,15 +11,26 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.PlayerActivity" />
+        <activity android:name=".activity.DemoActivity" />
+
+        <service android:name=".services.MusicPlayerService" />
+
+        <activity android:name=".activity.DownloadImageWithAsynctask" />
+        <activity android:name=".activity.DownloadImageWithIntentService" />
+
+        <service android:name=".services.DownloadImageServie" />
+        <service android:name=".services.NewService" />
+
+        <activity android:name=".activity.LinkinPark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.PlayerActivity"></activity>
-        <service android:name=".activity.MusicService"/>
+        <activity android:name=".activity.MyPlayer"></activity>
     </application>
 
 </manifest>

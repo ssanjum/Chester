@@ -3,7 +3,11 @@ package com.anjum.chester.services;
 import android.app.IntentService;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 
 import java.io.File;
@@ -25,14 +29,12 @@ public class DownloadImageServie extends IntentService {
         super("Fitoor");
     }
 
-    @Override
-    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-        imageUrl = intent.getStringExtra("URL");
-        return super.onStartCommand(intent, flags, startId);
-    }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        Bundle bundle = intent.getExtras();
+        Messenger messenger = (Messenger) bundle.get("messenger");
+        imageUrl = intent.getStringExtra("URL");
         int counter = 0;
         int contentLength = -1;
         int progressUpdate = 0;
@@ -55,11 +57,19 @@ public class DownloadImageServie extends IntentService {
             while ((read = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, read);
                 counter = counter + read;
+                if (bundle != null) {
+                    progressUpdate = (int) (((double) counter / contentLength) * 100);
+                    Message message = Message.obtain();
+                    message.arg1 = progressUpdate;
+                    messenger.send(message);
+                }
             }
             successfull = true;
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
             e.printStackTrace();
         } finally {
             if (urlConnection != null) {

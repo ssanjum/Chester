@@ -1,4 +1,4 @@
-package com.anjum.chester.activity;
+package com.anjum.chester.services;
 
 import android.app.Service;
 import android.content.Intent;
@@ -12,41 +12,37 @@ import com.anjum.chester.model.SongInfoModel;
 import java.io.IOException;
 
 /**
- * Created by sanjum on 3/14/2018.
+ * Created by sanjum on 3/15/2018.
  */
 
-public class MusicService extends Service {
+public class MusicPlayerService extends Service {
     private SongInfoModel songInfoModel;
-    private final IBinder jabbu = new MyBinder();
+    private final IBinder binder = new MyBinder();
     private MediaPlayer player;
-    private boolean isPlaying;
-
-    public MusicService() {
-        super();
-    }
+    private boolean isPlaying=false;
+    private int duration;
+    private boolean isResume;
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return jabbu;
+        return binder;
     }
 
     public class MyBinder extends Binder {
 
-        MusicService getService() {
+      public   MusicPlayerService getService() {
 
-            return MusicService.this;
+            return MusicPlayerService.this;
         }
     }
 
-
     public void setSong(SongInfoModel songInfoModel) {
         this.songInfoModel = songInfoModel;
+        player = new MediaPlayer();
     }
-
     public void startPlayer() {
         if (!isPlaying) {
-            player = new MediaPlayer();
             try {
                 player.setDataSource(songInfoModel.getSongUrl());
             } catch (IOException e) {
@@ -74,9 +70,9 @@ public class MusicService extends Service {
     }
 
     public void pausePlayer() {
-
+        duration = player.getCurrentPosition();
+        player.pause();
         isPlaying = false;
-        player.stop();
     }
 
     public boolean isPlaying() {
